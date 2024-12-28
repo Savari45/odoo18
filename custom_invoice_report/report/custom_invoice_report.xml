@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="report_invoice_document_custom" inherit_id="account.report_invoice_document">
+        <xpath expr="//div[@id='payment_term']" position="after">
+            <div id="new_div" class="clearfix">
+                <!-- Content to add -->
+                <style>
+                    #new_div table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 20px;
+                    }
+                    #new_div table, #new_div th, #new_div td {
+                    border: 1px solid black;
+                    }
+                    #new_div th, #new_div td {
+                    padding: 8px;
+                    text-align: right;
+                    }
+                    #new_div th {
+                    background-color: #f2f2f2;
+                    }
+                    #new_div .title-row {
+                    font-weight: bold;
+                    text-align: center;
+                    }
+                    #new_div .total-row {
+                    font-weight: bold;
+                    text-align: right;
+                    }
+                </style>
+
+                <table class="table table-sm o_main_table table-borderless" name="invoice_line_table">
+                    <thead>
+                        <span>
+                            <h6>OUTSTANDING INVOICES</h6>
+                        </span>
+                        <tr>
+                            <th name="th_description" class="text-center">
+                                <span>Ref</span>
+                            </th>
+                            <th name="th_date" class="text-center">
+                                <span>Date</span>
+                            </th>
+                            <th name="th_out_amount" class="text-end o_price_total">
+                                <span>Amount</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="invoice_tbody">
+                        <t t-set="invoice_vals" t-value="o.sudo()._compute_outstanding_credits()"/>
+                        <t t-foreach="invoice_vals['invoices']" t-as="line">
+                            <tr>
+                                <td name="td_dec" class="text-center">
+                                    <span t-field="line.name">
+                                        INV/2024/12/00375
+                                    </span>
+                                </td>
+                                <td name="td_dec" class="text-center">
+                                    <span t-field="line.invoice_date">00</span>
+                                </td>
+                                <td name="td_dec" class="text-end">
+                                    <span t-field="line.amount_residual_signed">00</span>
+                                </td>
+                            </tr>
+                        </t>
+                        <tr class="total-row">
+                            <td colspan="2">TOTAL OUTSTANDING</td>
+                            <td>
+                                <span t-esc="invoice_vals['total_outstanding']"
+                                      t-options='{"widget": "monetary", "display_currency": o.currency_id}'>00
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-sm o_main_table table-borderless" name="invoice_line_table">
+                    <thead>
+                        <span>
+                            <h6>PD CHEQUES OUTSTANDING INVOICES</h6>
+                        </span>
+                        <tr>
+                            <th name="ch_description" class="text-center">
+                                <span>Ref</span>
+                            </th>
+                            <th name="ch_date" class="text-center">
+                                <span>Date</span>
+                            </th>
+                            <th name="ch_out_amount" class="text-end o_price_total">
+                                <span>Amount</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="invoice_tbody">
+                        <t t-set="payments_vals" t-value="o.sudo()._compute_outstanding_cheque()"/>
+                        <t t-foreach="payments_vals['invoices']" t-as="line">
+                            <tr>
+                                <td name="td_dec" class="text-center">
+                                    <span t-field="line.move_id.name">
+                                        INV/2024/12/00375
+                                    </span>
+                                </td>
+                                <td name="td_dec" class="text-center">
+                                    <span t-field="line.date">00</span>
+                                </td>
+                                <td name="td_dec" class="text-end">
+                                    <span t-field="line.amount">00</span>
+                                </td>
+                            </tr>
+                        </t>
+                        <tr class="total-row">
+                            <td colspan="2">TOTAL PD CHEQUES</td>
+                            <td>
+                                <span t-esc="payments_vals['total_outstanding']"
+                                      t-options='{"widget": "monetary", "display_currency": o.currency_id}'>00
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="text-center"><b>PD CHEQUES AND OUTSTANDING INVOICES :</b>
+                            </td>
+                            <td>
+                                <span t-esc="payments_vals['total_outstanding'] + invoice_vals['total_outstanding']"
+                                      t-options='{"widget": "monetary", "display_currency": o.currency_id}'>00
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+        </xpath>
+    </template>
+</odoo>
