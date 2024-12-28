@@ -9,7 +9,6 @@ class AccountMove(models.Model):
 
     # @api.depends('partner_id')
     def _compute_outstanding_credits(self):
-        print("sssssssssssssssssssssssssssssssssssssssss")
         for record in self:
             outstanding_invoices = self.search([
                 ('partner_id', '=', record.partner_id.id),
@@ -17,7 +16,6 @@ class AccountMove(models.Model):
                 ('state', '=', 'posted'),
                 ('payment_state', '!=', 'paid')
             ])
-            print('invoiceeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',outstanding_invoices)
             total_outstanding = sum(outstanding_invoices.mapped('amount_residual'))
             return {
                 'invoices': outstanding_invoices,
@@ -33,8 +31,6 @@ class AccountMove(models.Model):
                 ('state', '=', 'in_process'),
                 ('move_id.journal_id.name', '=', 'Cheque')
             ])
-
-            print('checjinvoiceeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', outstanding_invoices)
             total_outstanding = sum(outstanding_invoices.mapped('amount'))
             return {
                 'invoices': outstanding_invoices,
