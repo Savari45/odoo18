@@ -6,7 +6,7 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//button[@name='413']" position="after">
+            <xpath expr="//button[@name='action_quotation_send']" position="after">
                 <button name="print_direct" type="object" string="Print SO"
                         help = "Print this SO instantly to system printer without converting to PDF!"
                         groups="tmi_print_direct_so.group_to_so_print_direct" class="oe_highlight"/>
